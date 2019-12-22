@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# task-runner: run external commands/scripts at specified intervals
+# Author: Curtis K
+# Github: https://github.com/curtis86/task-runner
+
+# Vars/dirs
+readonly home_dir="$( cd "$( dirname $0 )" ; pwd )"
+readonly task_dir="${home_dir}/tasks"
+readonly taskdata_dir="${home_dir}/taskdata"
+
+# Vars/files
+readonly log_file="${home_dir}/task-runner.log"
+readonly lock_file="${home_dir}/.lock"
+
+# Vars/other
+readonly run_timeout=180
+
+# Includes:
+. "${home_dir}/includes/functions.sh"
+
+# Setup - ensure files, dirs etc are created
+setup
+
+# TODO Parse options
+if [ $# -ge 1 ]; then
+  while getopts ":rlh" opt; do
+    case $opt in
+      r) echo "run" ;;
+      l) list_tasks ; exit 0 ;;
+      h) print_usage && exit 0 ;;
+      \?) echo -e "Invalid option: -$OPTARG\n" 2>&1 ; print_usage && exit 1 ;;
+    esac
+  done
+fi
+
+# Check existence of config file, and loads it
+check_conf_file && . "${home_dir}/task-runner.conf"
+
+# Lock checking should only occur on non-interactive/run; options should be allowed to pass.
+check_lock && lock
+
+# Validates, runs tasks
+while :; do
+  run_tasks
+  update_lock_timestamp
+  sleep 1
+done
+
+# We should finally exit here with unlock, but script might not get here (TODO: trap signals)
+exit_unlock

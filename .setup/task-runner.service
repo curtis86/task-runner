@@ -1,0 +1,15 @@
+[Unit]
+Description=Task Runner
+After=network.target
+
+[Service]
+ExecStart=/opt/task-runner/task-runner &
+PIDFile=/var/run/task-runner.pid
+User=root
+Group=root
+Type=simple
+RemainAfterExit=yes
+KillSignal=9
+
+[Install]
+WantedBy=multi-user.target

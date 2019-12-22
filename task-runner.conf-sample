@@ -1,0 +1,8 @@
+# Global timeout kill signal
+kill_signal=9
+
+# Default frequency
+default_frequency=180
+
+# Default timeout
+default_timeout=30

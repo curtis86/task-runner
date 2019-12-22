@@ -1,0 +1,7 @@
+*.log
+taskdata/**
+tasks/**
+!tasks/README.md
+.lock
+*.swp
+task-runner.conf
