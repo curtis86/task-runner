@@ -1,0 +1,23 @@
+version: v1.0
+name: Initial Pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Checkout Code
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - checkout
+  - name: Run some commands
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - ls -lah;
+            - pwd;
+            - hostname;
+            - id;
+            - uptime;
